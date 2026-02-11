@@ -18,22 +18,14 @@ $normalizedFiles = foreach ($file in $orphanedFiles) {
 
 $groupedDatabases = $normalizedFiles | Group-Object BaseName
 
-$databases = foreach ($db in $groupedDatabases) {
-    [pscustomobject]@{
-        Name  = $db.Name
-        Files = $db.Group.Path
+$dbCount = $groupedDatabases.Count
+
+if ($dbCount -eq 0) {
+    Write-Output "No free databases were found."
+} else {
+    Write-Output "Found $dbCount free databases"
+    foreach ($db in $groupedDatabases) {
+        Write-Output "Attaching $($db.Name)"
+        Mount-DbaDatabase -SqlInstance $SqlInstance -Database $db.Name -FileStructure $db.Group.Path
     }
 }
-
-Write-Output $databases
-
-# $dbCount = $databases.Count
-
-# if ($dbCount -eq 0) {
-#     Write-Output "No free databases were found."
-# } else {
-#     Write-Output "Found $dbCount free databases"
-#     foreach ($db in $databases) {
-#         Mount-DbaDatabase -SqlInstance $SqlInstance -Database $db.Name -FileStructure $db.Files
-#     }
-# }

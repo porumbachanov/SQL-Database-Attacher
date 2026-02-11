@@ -5,5 +5,13 @@ Set-DbatoolsConfig -FullName sql.connection.trustcert -Value $true -Register
 Set-DbatoolsConfig -FullName sql.connection.encrypt -Value $false -Register
 
 
-
 Set-ExecutionPolicy -ExecutionPolicy Restricted -Scope CurrentUser --disables script execution
+
+Get-ExecutionPolicy -List --see current ExecutionPolicy
+
+
+Get-DbaService -ComputerName localhost -- Find SQL Server Service Account
+Get-DbaService -ComputerName localhost -InstanceName MSSQLSERVER -- Gets the SQL Server related services related to the default instance MSSQLSERVER on the local computer.
+
+icacls "folder" -- to see current permissions for that folder
+icacls "D:\Work\Microinvest\DB\BAZI" /grant "NT AUTHORITY\NETWORKSERVICE:(OI)(CI)M" /T -- grant modifying permission to "D:\Work\Microinvest\DB\BAZI" for the "NT AUTHORITY\NETWORKSERVICE" machine account
