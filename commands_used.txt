@@ -1,0 +1,9 @@
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser --if not already RemoteSigned/enables script execution
+Install-Module dbatools -Scope CurrentUser
+
+Set-DbatoolsConfig -FullName sql.connection.trustcert -Value $true -Register
+Set-DbatoolsConfig -FullName sql.connection.encrypt -Value $false -Register
+
+
+
+Set-ExecutionPolicy -ExecutionPolicy Restricted -Scope CurrentUser --disables script execution
