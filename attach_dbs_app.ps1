@@ -110,27 +110,27 @@ $btnRun.Add_Click({
         $txtStatus.AppendText("Attaching databases...`r`n")
         foreach ($db in $groupedDatabases) {
             $txtStatus.AppendText("Attaching $($db.Name)...`r`n")
-                $errors = @()
-                $warnings = @()
-                $result = Mount-DbaDatabase -SqlInstance $SqlInstance -Database $db.Name -FileStructure $db.Group.Path 3>&1 2>&1
-                
-                foreach ($item in $result) {
-                    if ($item -is [System.Management.Automation.ErrorRecord]) {
-                        $errors += $item.Exception.Message
-                    }
-                    elseif ($item -is [System.Management.Automation.WarningRecord]) {
-                        $warnings += $item.Message
-                    }
+            $errors = @()
+            $warnings = @()
+            $result = Mount-DbaDatabase -SqlInstance $SqlInstance -Database $db.Name -FileStructure $db.Group.Path 3>&1 2>&1
+            
+            foreach ($item in $result) {
+                if ($item -is [System.Management.Automation.ErrorRecord]) {
+                    $errors += $item.Exception.Message
                 }
-                
-                if ($errors.Count -gt 0) {
-                    $txtStatus.AppendText("Failed to attach $($db.Name): ERRORS - $($errors -join '; ')`r`n")
+                elseif ($item -is [System.Management.Automation.WarningRecord]) {
+                    $warnings += $item.Message
                 }
-                elseif ($warnings.Count -gt 0) {
-                    $txtStatus.AppendText("Failed to attach $($db.Name): WARNINGS - $($warnings -join '; ')`r`n")
-                } else {
-                    $txtStatus.AppendText("Attached $($db.Name) successfully.`r`n")
-                }
+            }
+            
+            if ($errors.Count -gt 0) {
+                $txtStatus.AppendText("Failed to attach $($db.Name): ERRORS - $($errors -join '; ')`r`n")
+            }
+            elseif ($warnings.Count -gt 0) {
+                $txtStatus.AppendText("Failed to attach $($db.Name): WARNINGS - $($warnings -join '; ')`r`n")
+            } else {
+                $txtStatus.AppendText("Attached $($db.Name) successfully.`r`n")
+            }
         }
     }
 })
