@@ -2,8 +2,6 @@ $ErrorActionPreference = "Stop"
 
 Write-Host "Installing dbatools..." -ForegroundColor Cyan
 
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
-
 if (-not (Get-Module -ListAvailable -Name dbatools)) {
     Install-Module dbatools -Scope CurrentUser -Force -AllowClobber
     Write-Host "✓ dbatools installed" -ForegroundColor Green
